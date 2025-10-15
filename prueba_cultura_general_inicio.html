@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Prueba – Cultura General</title>
+<style>
+  :root{
+    --bg:#0b1320;
+    --card:#121b2b;
+    --accent:#00a481;
+    --accent-2:#F3CA12;
+    --text:#e8eef7;
+    --muted:#9fb0c7;
+    --wrong:#c23b22;
+    --right:#2ea043;
+  }
+  body{
+    margin:0;padding:0;
+    font-family:system-ui,Segoe UI,Roboto;
+    background:linear-gradient(180deg,#0b1320 0%,#0e1424 100%);
+    color:var(--text);
+  }
+  .center-start{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    height:100vh;text-align:center;
+  }
+  .btn-start{
+    background:linear-gradient(90deg,var(--accent) 0%,var(--accent-2) 100%);
+    border:none;border-radius:14px;
+    color:#0b1320;font-weight:800;font-size:1.2rem;
+    padding:14px 28px;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.3);
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:24px;display:none;}
+  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+  .title{font-weight:800;font-size:clamp(20px,4vw,30px)}
+  .badge{background:linear-gradient(90deg,var(--accent) 0%,var(--accent-2) 100%);
+    color:#0a0f18;font-weight:800;padding:8px 12px;border-radius:999px;box-shadow:0 4px 18px rgba(0,0,0,.25)}
+  .card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:18px;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+  ol{list-style:none;padding:0;margin:0;display:grid;gap:14px}
+  li.q{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:14px}
+  .qtext{font-weight:700;margin-bottom:10px}
+  .options{display:grid;gap:8px}
+  label.opt{display:flex;align-items:flex-start;gap:10px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);padding:10px 12px;border-radius:12px;cursor:pointer}
+  input[type="radio"]{transform:translateY(1px)}
+  .actions{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
+  button{border:0;padding:12px 16px;border-radius:12px;font-weight:800;cursor:pointer}
+  #btn-corregir{background:var(--accent);color:#06221e}
+  #btn-reiniciar{background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.18)}
+  .result{margin-top:16px;padding:14px;border-radius:12px;display:none;border:1px dashed rgba(255,255,255,.18)}
+  .result.ok{border-color:rgba(46,160,67,.5);background:rgba(46,160,67,.12)}
+  .result.ko{border-color:rgba(194,59,34,.5);background:rgba(194,59,34,.12)}
+  .tag{font-weight:800;padding:4px 8px;border-radius:999px}
+  .tag.ok{background:rgba(46,160,67,.2);color:#a6f3b7}
+  .tag.ko{background:rgba(194,59,34,.2);color:#ffc3b8}
+</style>
+</head>
+<body>
+
+<div id="start-screen" class="center-start">
+  <h1>🧠 Prueba – Cultura General</h1>
+  <p style="color:var(--muted)">Pulsa el botón para comenzar</p>
+  <button class="btn-start" id="start-btn">Empezar prueba</button>
+</div>
+
+<div class="wrap" id="quiz-section">
+  <header>
+    <div class="title">🧠 Prueba – Cultura General</div>
+    <div class="badge">Objetivo: acertar al menos 7 de 10</div>
+  </header>
+
+  <div class="card">
+    <form id="quiz">
+      <ol>
+        <li class="q"><div class="qtext">1) ¿Cuál es el planeta más cercano al Sol?</div><div class="options">
+          <label class="opt"><input type="radio" name="q1"> Venus</label>
+          <label class="opt"><input type="radio" name="q1" data-correct="1"> Mercurio</label>
+          <label class="opt"><input type="radio" name="q1"> Marte</label></div></li>
+        <li class="q"><div class="qtext">2) ¿En qué año llegó el ser humano a la Luna?</div><div class="options">
+          <label class="opt"><input type="radio" name="q2" data-correct="1"> 1969</label>
+          <label class="opt"><input type="radio" name="q2"> 1975</label>
+          <label class="opt"><input type="radio" name="q2"> 1965</label></div></li>
+        <li class="q"><div class="qtext">3) ¿Cuál es el río más largo del mundo?</div><div class="options">
+          <label class="opt"><input type="radio" name="q3"> Nilo</label>
+          <label class="opt"><input type="radio" name="q3" data-correct="1"> Amazonas</label>
+          <label class="opt"><input type="radio" name="q3"> Yangtsé</label></div></li>
+        <li class="q"><div class="qtext">4) ¿Quién pintó <em>La última cena</em>?</div><div class="options">
+          <label class="opt"><input type="radio" name="q4"> Miguel Ángel</label>
+          <label class="opt"><input type="radio" name="q4" data-correct="1"> Leonardo da Vinci</label>
+          <label class="opt"><input type="radio" name="q4"> Rafael</label></div></li>
+        <li class="q"><div class="qtext">5) ¿Cuál es el idioma más hablado del mundo?</div><div class="options">
+          <label class="opt"><input type="radio" name="q5"> Inglés</label>
+          <label class="opt"><input type="radio" name="q5" data-correct="1"> Mandarín</label>
+          <label class="opt"><input type="radio" name="q5"> Español</label></div></li>
+        <li class="q"><div class="qtext">6) ¿En qué continente está el desierto del Sahara?</div><div class="options">
+          <label class="opt"><input type="radio" name="q6" data-correct="1"> África</label>
+          <label class="opt"><input type="radio" name="q6"> Asia</label>
+          <label class="opt"><input type="radio" name="q6"> Oceanía</label></div></li>
+        <li class="q"><div class="qtext">7) ¿Qué elemento químico tiene el símbolo “O”?</div><div class="options">
+          <label class="opt"><input type="radio" name="q7"> Oro</label>
+          <label class="opt"><input type="radio" name="q7" data-correct="1"> Oxígeno</label>
+          <label class="opt"><input type="radio" name="q7"> Osmio</label></div></li>
+        <li class="q"><div class="qtext">8) ¿Cuál es la capital de Canadá?</div><div class="options">
+          <label class="opt"><input type="radio" name="q8"> Toronto</label>
+          <label class="opt"><input type="radio" name="q8"> Vancouver</label>
+          <label class="opt"><input type="radio" name="q8" data-correct="1"> Ottawa</label></div></li>
+        <li class="q"><div class="qtext">9) ¿Qué órgano del cuerpo humano produce la insulina?</div><div class="options">
+          <label class="opt"><input type="radio" name="q9"> Hígado</label>
+          <label class="opt"><input type="radio" name="q9" data-correct="1"> Páncreas</label>
+          <label class="opt"><input type="radio" name="q9"> Riñón</label></div></li>
+        <li class="q"><div class="qtext">10) ¿Quién escribió <em>Don Quijote de la Mancha</em>?</div><div class="options">
+          <label class="opt"><input type="radio" name="q10" data-correct="1"> Miguel de Cervantes</label>
+          <label class="opt"><input type="radio" name="q10"> Lope de Vega</label>
+          <label class="opt"><input type="radio" name="q10"> Calderón de la Barca</label></div></li>
+      </ol>
+
+      <div class="actions">
+        <button id="btn-corregir" type="button">Corregir</button>
+        <button id="btn-reiniciar" type="button">Reiniciar</button>
+      </div>
+      <div id="result" class="result"></div>
+    </form>
+  </div>
+</div>
+
+<script>
+document.getElementById('start-btn').addEventListener('click', ()=>{
+  document.getElementById('start-screen').style.display='none';
+  document.getElementById('quiz-section').style.display='block';
+});
+
+(function(){
+  const form=document.getElementById('quiz'),btnC=document.getElementById('btn-corregir'),btnR=document.getElementById('btn-reiniciar'),res=document.getElementById('result'),MIN=7;
+  function reset(){form.reset();form.querySelectorAll('label').forEach(l=>l.style.background='');res.style.display='none';}
+  btnR.onclick=reset;
+  btnC.onclick=()=>{
+    let ok=0;form.querySelectorAll('input[data-correct="1"]').forEach(i=>{if(i.checked)ok++});
+    res.style.display='block';
+    if(ok>=MIN){res.className='result ok';res.innerHTML=`✅ ${ok}/10 correctas. Has obtenido el dígito: 3`;}
+    else{res.className='result ko';res.innerHTML=`❌ ${ok}/10 correctas. Necesitas ${MIN}/10.`;}
+  };
+})();
+</script>
+</body>
+</html>

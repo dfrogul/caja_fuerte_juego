@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Prueba 2 – Villancicos (Completa el verso)</title>
+<style>
+  :root{ --crg-green:#007853; --crg-yellow:#F3CA12; --dark:#032821; --light:#ffffff; }
+  *{ box-sizing:border-box }
+  body{
+    margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,"Open Sans",sans-serif;
+    background:linear-gradient(180deg,var(--dark),#064536); color:var(--light); min-height:100dvh;
+  }
+  .wrap{ max-width:900px; margin:0 auto; padding:clamp(16px,3vw,32px); }
+  header{ display:flex; align-items:center; gap:16px; margin-bottom:20px; }
+  .badge{ background:var(--crg-yellow); color:#1a1a1a; font-weight:700; padding:6px 10px; border-radius:999px; font-size:.85rem; }
+  h1{ margin:0; font-size:clamp(22px,3.5vw,32px); font-weight:800; }
+  .card{ background:#0d2f28; border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:18px; margin:14px 0; box-shadow:0 8px 24px rgba(0,0,0,.25); }
+  .q-title{ font-weight:700; margin-bottom:10px }
+  .q-input{ width:100%; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.15); background:#0f3a31; color:#fff; }
+  .actions{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-top:18px; }
+  button{ background:var(--crg-green); color:var(--light); border:none; padding:12px 18px; border-radius:12px; font-weight:800; cursor:pointer; letter-spacing:.2px; }
+  button.secondary{ background:transparent; border:1px solid rgba(255,255,255,.2) }
+  .result{ display:none; margin-top:20px; padding:16px; border-radius:14px; background:#0b2a24; border:1px solid rgba(255,255,255,.1) }
+  .code-box{ font-size:2.5rem; font-weight:900; color:var(--crg-yellow); text-align:center; letter-spacing:4px; margin-top:8px }
+  footer{ margin-top:28px; font-size:.85rem; color:#cfeee5; opacity:.9; text-align:center }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="badge">Prueba 2</span>
+    <h1>Villancicos · Completa el verso</h1>
+  </header>
+
+  <p>Escribe la <strong>palabra que falta</strong> en cada verso. No se distinguen mayúsculas ni tildes.</p>
+
+  <div id="quiz"></div>
+
+  <div class="actions">
+    <button id="btnSubmit">Enviar respuestas</button>
+    <button id="btnClear" class="secondary">Limpiar</button>
+  </div>
+
+  <div id="result" class="result"></div>
+
+  <footer>
+    CRG · Cena de Navidad · Juego “Caja Fuerte”
+  </footer>
+</div>
+
+<script>
+// --- Utilidad: normalizar (sin tildes, minúsculas) ---
+function norm(s){
+  return (s || "")
+    .toString()
+    .normalize("NFD")              // separa acentos
+    .replace(/[\u0300-\u036f]/g,"")// quita diacríticos
+    .toLowerCase()
+    .trim();
+}
+
+// --- Contenido (validación por texto literal) ---
+const QUESTIONS = [
+  {
+    text: "El camino que lleva a Belén baja hasta el valle que la nieve ____",
+    answer: "cubrió" // El Tamborilero
+  },
+  {
+    text: "En el portal de Belén los gitanillos han hecho un ____",
+    answer: "corral" // Los peces en el río
+  },
+  {
+    text: "Con mi burrito sabanero voy camino de Belén; el lucerito mañanero ilumina mi ____",
+    answer: "sendero" // El Burrito Sabanero
+  },
+  {
+    text: "Adeste fideles, laeti triumphantes, venite, venite ____",
+    answer: "adoremus" // Adeste Fideles
+  },
+  {
+    text: "María, María, ven acá volando, que los pañales los está ____",
+    answer: "lavando" // Hacia Belén va una burra
+  },
+  {
+    text: "En el cielo hay una estrella que a los reyes magos ____",
+    answer: "guía" // Arre borriquito
+  }
+];
+
+const quizEl = document.getElementById("quiz");
+const btnSubmit = document.getElementById("btnSubmit");
+const btnClear = document.getElementById("btnClear");
+const resultEl = document.getElementById("result");
+
+function renderQuiz(){
+  quizEl.innerHTML = "";
+  QUESTIONS.forEach((q, qi)=>{
+    const card = document.createElement("div");
+    card.className = "card";
+    const title = document.createElement("div");
+    title.className = "q-title";
+    title.textContent = `${qi+1}. ${q.text}`;
+    card.appendChild(title);
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.className = "q-input";
+    input.placeholder = "Escribe aquí…";
+    input.name = `q-${qi}`;
+    card.appendChild(input);
+
+    quizEl.appendChild(card);
+  });
+}
+
+function getScore(){
+  let score = 0;
+  QUESTIONS.forEach((q, qi)=>{
+    const val = document.querySelector(`input[name="q-${qi}"]`)?.value || "";
+    if (norm(val) === norm(q.answer)) score++;
+  });
+  return score;
+}
+
+btnSubmit.addEventListener("click", ()=>{
+  const score = getScore();
+  const total = QUESTIONS.length;
+  resultEl.style.display = "block";
+
+  if (score >= 4){
+    const d2 = score; // D2 = número de aciertos (0–6)
+    resultEl.innerHTML = `
+      <h2>¡Muy bien!</h2>
+      <p>Has acertado <strong>${score}</strong> de ${total} versos.</p>
+      <p>Tu segundo dígito del código es:</p>
+      <div class="code-box">${d2}</div>
+    `;
+  } else {
+    resultEl.innerHTML = `
+      <h2>¡Casi!</h2>
+      <p>Has acertado ${score} de ${total}. Necesitas al menos 4 para conseguir el dígito.</p>
+      <button id="retryBtn">Volver a intentar</button>
+    `;
+    document.getElementById("retryBtn").addEventListener("click", ()=>{
+      document.querySelectorAll('.q-input').forEach(i => i.value = "");
+      resultEl.style.display = "none";
+    });
+  }
+  resultEl.scrollIntoView({behavior:"smooth"});
+});
+
+btnClear.addEventListener("click", ()=>{
+  document.querySelectorAll('.q-input').forEach(i => i.value = "");
+  resultEl.style.display = "none";
+});
+
+renderQuiz();
+</script>
+</body>
+</html>

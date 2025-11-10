@@ -23,8 +23,6 @@
   .options{display:grid;gap:10px}
   .opt{background:#0f3a31;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:10px 12px;display:flex;gap:10px;align-items:flex-start;cursor:pointer}
   .opt input{margin-top:4px;accent-color:var(--crg-yellow)}
-  .hint{font-size:.85rem;color:#d2d2d2;margin-top:4px}
-  .tbd{color:#ffd966;font-weight:700}
   .actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:18px}
   button{background:var(--crg-green);color:var(--light);border:none;padding:12px 18px;border-radius:12px;font-weight:800;cursor:pointer;letter-spacing:.2px}
   button.secondary{background:transparent;border:1px solid rgba(255,255,255,.2)}
@@ -55,7 +53,7 @@
 </div>
 
 <script>
-// Validación por texto literal
+// Validación por texto literal; dígito mostrado siempre 6 si score >= 5.
 const QUESTIONS = [
   {
     text: "¿Cuál es la edad media del Consejo Rector?",
@@ -63,9 +61,9 @@ const QUESTIONS = [
     correctText: "61"
   },
   {
-    text: "¿Cuántos atracos se llevan registrados en CRG en todos sus años de historia?",
-    options: ["6","4","10","12"],
-    correctText: null // pendiente
+    text: "¿Cuántos atracos se llevan registrados en CRG desde el año 1981?",
+    options: ["6","7","10","12"],
+    correctText: "7"
   },
   {
     text: "¿Cuál fue el beneficio neto de la Caja en el año 2024?",
@@ -122,12 +120,6 @@ function renderQuiz(){
       opts.appendChild(label);
     });
     card.appendChild(opts);
-    if(q.correctText===null){
-      const hint=document.createElement("p");
-      hint.className="hint";
-      hint.innerHTML="⚠️ <span class='tbd'>Respuesta pendiente</span>. No puntúa de momento.";
-      card.appendChild(hint);
-    }
     quizEl.appendChild(card);
   });
 }
@@ -148,7 +140,7 @@ btnSubmit.addEventListener("click",()=>{
   const {score,totalDef}=getScore();
   resultEl.style.display="block";
   if(score>=5){
-    const d1=score%10;
+    const d1 = 6;
     resultEl.innerHTML=`
       <h2>¡Muy bien!</h2>
       <p>Has acertado <strong>${score}</strong> de ${totalDef} preguntas.</p>
@@ -176,3 +168,4 @@ renderQuiz();
 </script>
 </body>
 </html>
+

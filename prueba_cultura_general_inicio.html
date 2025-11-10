@@ -55,107 +55,90 @@
 </div>
 
 <script>
+// Validación por texto literal
 const QUESTIONS = [
   {
     text: "¿Cuál es la edad media del Consejo Rector?",
-    options: ["73", "84", "61", "46"],
-    correct: 3
+    options: ["73","84","61","46"],
+    correctText: "61"
   },
   {
     text: "¿Cuántos atracos se llevan registrados en CRG en todos sus años de historia?",
-    options: ["6", "4", "10", "12"],
-    correct: null
+    options: ["6","4","10","12"],
+    correctText: null // pendiente
   },
   {
     text: "¿Cuál fue el beneficio neto de la Caja en el año 2024?",
-    options: ["32.146.758,45€", "31.843.733,12€", "33.450.124,73€", "29.365.100,37€"],
-    correct: 2
+    options: ["32.146.758,45€","31.843.733,12€","33.450.124,73€","29.365.100,37€"],
+    correctText: "31.843.733,12€"
   },
   {
     text: "¿En qué año la Entidad pasó a llamarse Caixa Rural Galega?",
-    options: ["1999", "1995", "2001", "1993"],
-    correct: 1
+    options: ["1999","1995","2001","1993"],
+    correctText: "1999"
   },
   {
     text: "¿Cuántos rollos de TPV se usan de media al año?",
-    options: ["19.000", "20.000", "17.000", "29.000"],
-    correct: 2
+    options: ["19.000","20.000","17.000","29.000"],
+    correctText: "20.000"
   },
   {
     text: "Indica el número de personas que se han incorporado a la plantilla en el año 2025.",
-    options: ["13", "10", "3", "9"],
-    correct: 2
+    options: ["13","10","3","9"],
+    correctText: "10"
   },
   {
     text: "¿Cuál es el nombre más repetido entre los empleados de Caixa Rural Galega, si solo contamos los nombres no compuestos (sin segundas partes como “José Manuel” o “María del Carmen”)?",
-    options: ["Silvia", "Javier", "Mónica", "Verónica"],
-    correct: 4
+    options: ["Silvia","Javier","Mónica","Verónica"],
+    correctText: "Verónica"
   }
 ];
 
-const quizEl = document.getElementById("quiz");
-const btnSubmit = document.getElementById("btnSubmit");
-const btnClear = document.getElementById("btnClear");
-const resultEl = document.getElementById("result");
-
-// Barajar array (Fisher–Yates)
-function shuffle(array){
-  for(let i=array.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [array[i],array[j]]=[array[j],array[i]];
-  }
-  return array;
-}
+const quizEl=document.getElementById("quiz");
+const btnSubmit=document.getElementById("btnSubmit");
+const btnClear=document.getElementById("btnClear");
+const resultEl=document.getElementById("result");
 
 function renderQuiz(){
   quizEl.innerHTML="";
-  const shuffledQuestions = shuffle([...QUESTIONS]);
-  shuffledQuestions.forEach((q, qi)=>{
+  QUESTIONS.forEach((q,qi)=>{
     const card=document.createElement("div");
     card.className="card";
     const title=document.createElement("div");
     title.className="q-title";
     title.textContent=`${qi+1}. ${q.text}`;
     card.appendChild(title);
-
     const opts=document.createElement("div");
     opts.className="options";
-    const optionIndexes = shuffle([0,1,2,3].slice(0, q.options.length));
-    optionIndexes.forEach(oi=>{
+    q.options.forEach((opt)=>{
       const label=document.createElement("label");
       label.className="opt";
       const input=document.createElement("input");
-      input.type="radio";
-      input.name=`q-${qi}`;
-      input.value=oi;
+      input.type="radio"; input.name=`q-${qi}`; input.value=opt;
       label.appendChild(input);
       const span=document.createElement("span");
-      span.textContent=q.options[oi];
+      span.textContent=opt;
       label.appendChild(span);
       opts.appendChild(label);
     });
     card.appendChild(opts);
-
-    if(q.correct===null){
+    if(q.correctText===null){
       const hint=document.createElement("p");
       hint.className="hint";
       hint.innerHTML="⚠️ <span class='tbd'>Respuesta pendiente</span>. No puntúa de momento.";
       card.appendChild(hint);
     }
-
     quizEl.appendChild(card);
   });
 }
 
 function getScore(){
-  let score=0, totalDef=0;
-  const cards = document.querySelectorAll(".card");
-  cards.forEach((card, qi)=>{
-    const q = QUESTIONS[qi];
-    if(typeof q.correct==="number"){
+  let score=0,totalDef=0;
+  QUESTIONS.forEach((q,qi)=>{
+    if(q.correctText){
       totalDef++;
-      const checked = card.querySelector("input:checked");
-      if(checked && Number(checked.value)===q.correct){score++;}
+      const checked=document.querySelector(`input[name='q-${qi}']:checked`);
+      if(checked && checked.value.trim()===q.correctText.trim()) score++;
     }
   });
   return {score,totalDef};
@@ -165,29 +148,27 @@ btnSubmit.addEventListener("click",()=>{
   const {score,totalDef}=getScore();
   resultEl.style.display="block";
   if(score>=5){
-    const d1 = score % 10;
-    resultEl.innerHTML = `
+    const d1=score%10;
+    resultEl.innerHTML=`
       <h2>¡Muy bien!</h2>
       <p>Has acertado <strong>${score}</strong> de ${totalDef} preguntas.</p>
       <p>Tu primer dígito del código es:</p>
-      <div class="code-box">${d1}</div>
-    `;
+      <div class="code-box">${d1}</div>`;
   } else {
-    resultEl.innerHTML = `
+    resultEl.innerHTML=`
       <h2>¡Casi!</h2>
       <p>Has acertado ${score} de ${totalDef} preguntas. Necesitas al menos 5 para conseguir el dígito.</p>
-      <button id="retryBtn">Volver a intentar</button>
-    `;
+      <button id='retryBtn'>Volver a intentar</button>`;
     document.getElementById("retryBtn").addEventListener("click",()=>{
+      document.querySelectorAll("input[type='radio']").forEach(r=>r.checked=false);
       resultEl.style.display="none";
-      renderQuiz();
     });
   }
   resultEl.scrollIntoView({behavior:"smooth"});
 });
 
 btnClear.addEventListener("click",()=>{
-  document.querySelectorAll('input[type="radio"]').forEach(r=>r.checked=false);
+  document.querySelectorAll("input[type='radio']").forEach(r=>r.checked=false);
   resultEl.style.display="none";
 });
 

@@ -7,10 +7,8 @@
 <style>
   :root{ --crg-green:#007853; --crg-yellow:#F3CA12; --dark:#032821; --light:#ffffff; }
   *{ box-sizing:border-box }
-  body{
-    margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,"Open Sans",sans-serif;
-    background:linear-gradient(180deg,var(--dark),#064536); color:var(--light); min-height:100dvh;
-  }
+  body{ margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,"Open Sans",sans-serif;
+        background:linear-gradient(180deg,var(--dark),#064536); color:var(--light); min-height:100dvh; }
   .wrap{ max-width:900px; margin:0 auto; padding:clamp(16px,3vw,32px); }
   header{ display:flex; align-items:center; gap:16px; margin-bottom:20px; }
   .badge{ background:var(--crg-yellow); color:#1a1a1a; font-weight:700; padding:6px 10px; border-radius:999px; font-size:.85rem; }
@@ -50,77 +48,41 @@
 </div>
 
 <script>
-// --- Utilidad: normalizar (sin tildes, minúsculas) ---
+// Normalizador (sin tildes, minúsculas)
 function norm(s){
-  return (s || "")
-    .toString()
-    .normalize("NFD")              // separa acentos
-    .replace(/[\u0300-\u036f]/g,"")// quita diacríticos
-    .toLowerCase()
-    .trim();
+  return (s||"").toString().normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
 }
 
-// --- Contenido (validación por texto literal) ---
+// Preguntas definitivas
 const QUESTIONS = [
-  {
-    text: "El camino que lleva a Belén baja hasta el valle que la nieve ____",
-    answer: "cubrió" // El Tamborilero
-  },
-  {
-    text: "En el portal de Belén los gitanillos han hecho un ____",
-    answer: "corral" // Los peces en el río
-  },
-  {
-    text: "Con mi burrito sabanero voy camino de Belén; el lucerito mañanero ilumina mi ____",
-    answer: "sendero" // El Burrito Sabanero
-  },
-  {
-    text: "Adeste fideles, laeti triumphantes, venite, venite ____",
-    answer: "adoremus" // Adeste Fideles
-  },
-  {
-    text: "María, María, ven acá volando, que los pañales los está ____",
-    answer: "lavando" // Hacia Belén va una burra
-  },
-  {
-    text: "En el cielo hay una estrella que a los reyes magos ____",
-    answer: "guía" // Arre borriquito
-  }
+  { text: "El camino que lleva a Belén baja hasta el valle que la nieve ____",           answer: "cubrió"   }, // El Tamborilero
+  { text: "En el portal de Belén los gitanillos han hecho un ____",                      answer: "corral"   }, // Los peces en el río
+  { text: "Con mi burrito sabanero voy camino de Belén; el lucerito mañanero ilumina mi ____", answer: "sendero" }, // Burrito sabanero
+  { text: "Adeste fideles, laeti triumphantes, venite, venite ____",                     answer: "adoremus" }, // Adeste Fideles
+  { text: "María, María, ven acá volando, que los pañales los está ____",                answer: "lavando"  }, // Hacia Belén va una burra
+  { text: "En el cielo hay una estrella que a los reyes magos ____",                      answer: "guía"     }  // Arre borriquito
 ];
 
 const quizEl = document.getElementById("quiz");
-const btnSubmit = document.getElementById("btnSubmit");
-const btnClear = document.getElementById("btnClear");
 const resultEl = document.getElementById("result");
+const btnSubmit = document.getElementById("btnSubmit");
+const btnClear  = document.getElementById("btnClear");
 
 function renderQuiz(){
   quizEl.innerHTML = "";
-  QUESTIONS.forEach((q, qi)=>{
-    const card = document.createElement("div");
-    card.className = "card";
-    const title = document.createElement("div");
-    title.className = "q-title";
-    title.textContent = `${qi+1}. ${q.text}`;
-    card.appendChild(title);
-
-    const input = document.createElement("input");
-    input.type = "text";
-    input.className = "q-input";
-    input.placeholder = "Escribe aquí…";
-    input.name = `q-${qi}`;
-    card.appendChild(input);
-
-    quizEl.appendChild(card);
+  QUESTIONS.forEach((q, i)=>{
+    const card = document.createElement("div"); card.className = "card";
+    const t = document.createElement("div"); t.className="q-title"; t.textContent = `${i+1}. ${q.text}`;
+    const inp = document.createElement("input"); inp.className="q-input"; inp.type="text"; inp.name=`q-${i}`; inp.placeholder="Escribe aquí…";
+    card.appendChild(t); card.appendChild(inp); quizEl.appendChild(card);
   });
 }
 
 function getScore(){
-  let score = 0;
-  QUESTIONS.forEach((q, qi)=>{
-    const val = document.querySelector(`input[name="q-${qi}"]`)?.value || "";
-    if (norm(val) === norm(q.answer)) score++;
-  });
-  return score;
+  let s=0; QUESTIONS.forEach((q,i)=>{
+    const val = document.querySelector(`input[name="q-${i}"]`)?.value || "";
+    if (norm(val) === norm(q.answer)) s++;
+  }); return s;
 }
 
 btnSubmit.addEventListener("click", ()=>{
@@ -129,19 +91,17 @@ btnSubmit.addEventListener("click", ()=>{
   resultEl.style.display = "block";
 
   if (score >= 4){
-    const d2 = score; // D2 = número de aciertos (0–6)
+    const d2 = 7; // F I J O según código 6-7-1-6
     resultEl.innerHTML = `
       <h2>¡Muy bien!</h2>
       <p>Has acertado <strong>${score}</strong> de ${total} versos.</p>
-      <p>Tu segundo dígito del código es:</p>
-      <div class="code-box">${d2}</div>
-    `;
+      <p>Tu <strong>segundo dígito</strong> del código es:</p>
+      <div class="code-box">${d2}</div>`;
   } else {
     resultEl.innerHTML = `
       <h2>¡Casi!</h2>
       <p>Has acertado ${score} de ${total}. Necesitas al menos 4 para conseguir el dígito.</p>
-      <button id="retryBtn">Volver a intentar</button>
-    `;
+      <button id="retryBtn">Volver a intentar</button>`;
     document.getElementById("retryBtn").addEventListener("click", ()=>{
       document.querySelectorAll('.q-input').forEach(i => i.value = "");
       resultEl.style.display = "none";

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Prueba 4 - Películas navideñas (Dígito 4)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --verde-oscuro: #022b26;
+      --verde-claro: #00a481;
+      --amarillo: #f3ca12;
+      --blanco: #ffffff;
+      --rojo: #ff4d4d;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #024038 0%, #020b0a 50%, #000000 100%);
+      color: var(--blanco);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      background: rgba(2, 43, 38, 0.92);
+      border-radius: 18px;
+      padding: 24px 18px;
+      max-width: 780px;
+      width: 95%;
+      box-shadow: 0 0 18px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(243, 202, 18, 0.3);
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      color: var(--amarillo);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .subtitulo {
+      text-align: center;
+      font-size: 0.9rem;
+      margin-bottom: 1.4rem;
+      color: #dfeff0;
+    }
+
+    .instrucciones {
+      font-size: 0.85rem;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 10px 12px;
+      border-radius: 10px;
+      border-left: 3px solid var(--verde-claro);
+      margin-bottom: 1.2rem;
+    }
+
+    .pregunta {
+      background: rgba(0, 0, 0, 0.45);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(0, 164, 129, 0.3);
+    }
+
+    .pregunta h2 {
+      font-size: 1rem;
+      margin: 0 0 6px;
+      color: var(--amarillo);
+    }
+
+    .enunciado {
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .opciones {
+      list-style: none;
+      padding-left: 0;
+      margin: 6px 0 4px;
+      font-size: 0.9rem;
+    }
+
+    .opciones li {
+      margin-bottom: 4px;
+    }
+
+    .opciones label {
+      cursor: pointer;
+    }
+
+    input[type="radio"] {
+      margin-right: 6px;
+      accent-color: var(--verde-claro);
+    }
+
+    .feedback {
+      font-size: 0.8rem;
+      min-height: 1em;
+    }
+
+    .feedback.ok {
+      color: var(--verde-claro);
+    }
+
+    .feedback.error {
+      color: var(--rojo);
+    }
+
+    .botonera {
+      text-align: center;
+      margin-top: 16px;
+      margin-bottom: 8px;
+    }
+
+    button {
+      background: linear-gradient(135deg, var(--verde-claro), var(--amarillo));
+      color: #00231b;
+      border: none;
+      border-radius: 999px;
+      padding: 8px 22px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 10px rgba(0, 164, 129, 0.7);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+      box-shadow: 0 0 14px rgba(243, 202, 18, 0.7);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+    }
+
+    #resultadoGeneral {
+      text-align: center;
+      font-size: 0.9rem;
+      margin-top: 8px;
+      min-height: 1.2em;
+    }
+
+    .digito {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--amarillo);
+      margin-top: 6px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 18px 14px;
+      }
+
+      h1 {
+        font-size: 1.2rem;
+      }
+
+      .enunciado {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Prueba 4 · Películas navideñas</h1>
+    <div class="subtitulo">Adivina la película a partir de los emojis</div>
+
+    <div class="instrucciones">
+      Marca una opción en cada pregunta. Si aciertas las 4,
+      obtendrás el <strong>dígito 4 del código de la caja fuerte</strong>.
+    </div>
+
+    <!-- Pregunta 1 -->
+    <div class="pregunta">
+      <h2>Pregunta 1</h2>
+      <div class="enunciado">
+        Emojis: <span style="font-size:1.3rem;">🏠👦🎄🧻</span>
+      </div>
+      <ul class="opciones">
+        <li><label><input type="radio" name="p1" value="A">A) Love Actually</label></li>
+        <li><label><input type="radio" name="p1" value="B">B) El Grinch</label></li>
+        <li><label><input type="radio" name="p1" value="C">C) Solo en casa</label></li>
+        <li><label><input type="radio" name="p1" value="D">D) Pesadilla antes de Navidad</label></li>
+      </ul>
+      <div id="feedback1" class="feedback"></div>
+    </div>
+
+    <!-- Pregunta 2 -->
+    <div class="pregunta">
+      <h2>Pregunta 2</h2>
+      <div class="enunciado">
+        Emojis: <span style="font-size:1.3rem;">💚👹🎄🏙️</span>
+      </div>
+      <ul class="opciones">
+        <li><label><input type="radio" name="p2" value="A">A) Crónicas de Navidad</label></li>
+        <li><label><input type="radio" name="p2" value="B">B) El Grinch</label></li>
+        <li><label><input type="radio" name="p2" value="C">C) Elf</label></li>
+        <li><label><input type="radio" name="p2" value="D">D) Klaus</label></li>
+      </ul>
+      <div id="feedback2" class="feedback"></div>
+    </div>
+
+    <!-- Pregunta 3 -->
+    <div class="pregunta">
+      <h2>Pregunta 3</h2>
+      <div class="enunciado">
+        Emojis: <span style="font-size:1.3rem;">🚂❄️🎄👦</span>
+      </div>
+      <ul class="opciones">
+        <li><label><input type="radio" name="p3" value="A">A) Polar Express</label></li>
+        <li><label><input type="radio" name="p3" value="B">B) Arthur Christmas</label></li>
+        <li><label><input type="radio" name="p3" value="C">C) Gremlins</label></li>
+        <li><label><input type="radio" name="p3" value="D">D) Solo en casa 2</label></li>
+      </ul>
+      <div id="feedback3" class="feedback"></div>
+    </div>
+
+    <!-- Pregunta 4 -->
+    <div class="pregunta">
+      <h2>Pregunta 4</h2>
+      <div class="enunciado">
+        Emojis: <span style="font-size:1.3rem;">🔫🏢🎄🎅</span>
+      </div>
+      <ul class="opciones">
+        <li><label><input type="radio" name="p4" value="A">A) Last Christmas</label></li>
+        <li><label><input type="radio" name="p4" value="B">B) Jungla de cristal</label></li>
+        <li><label><input type="radio" name="p4" value="C">C) Elf</label></li>
+        <li><label><input type="radio" name="p4" value="D">D) Milagro en la ciudad</label></li>
+      </ul>
+      <div id="feedback4" class="feedback"></div>
+    </div>
+
+    <div class="botonera">
+      <button type="button" onclick="corregir()">Comprobar respuestas</button>
+    </div>
+
+    <div id="resultadoGeneral"></div>
+    <div id="digito4" class="digito"></div>
+  </div>
+
+  <script>
+    const RESPUESTAS = {
+      p1: "C",
+      p2: "B",
+      p3: "A",
+      p4: "B"
+    };
+
+    const DIGITO_4 = 4;
+
+    function corregir() {
+      let aciertos = 0;
+
+      const fb1 = document.getElementById("feedback1");
+      const fb2 = document.getElementById("feedback2");
+      const fb3 = document.getElementById("feedback3");
+      const fb4 = document.getElementById("feedback4");
+      const resultadoGeneral = document.getElementById("resultadoGeneral");
+      const digito4 = document.getElementById("digito4");
+
+      [fb1, fb2, fb3, fb4].forEach(fb => {
+        fb.textContent = "";
+        fb.className = "feedback";
+      });
+      resultadoGeneral.textContent = "";
+      digito4.textContent = "";
+
+      function corregirPregunta(nombre, fbElem, correcta) {
+        const seleccion = document.querySelector(`input[name="${nombre}"]:checked`);
+        if (!seleccion) {
+          fbElem.textContent = "Selecciona una opción.";
+          fbElem.classList.add("error");
+          return;
+        }
+        if (seleccion.value === correcta) {
+          fbElem.textContent = "Correcto.";
+          fbElem.classList.add("ok");
+          aciertos++;
+        } else {
+          fbElem.textContent = "Incorrecto.";
+          fbElem.classList.add("error");
+        }
+      }
+
+      corregirPregunta("p1", fb1, RESPUESTAS.p1);
+      corregirPregunta("p2", fb2, RESPUESTAS.p2);
+      corregirPregunta("p3", fb3, RESPUESTAS.p3);
+      corregirPregunta("p4", fb4, RESPUESTAS.p4);
+
+      if (aciertos === 4) {
+        resultadoGeneral.textContent = "Has acertado las 4 películas. Prueba 4 superada.";
+        resultadoGeneral.style.color = "#00a481";
+        digito4.textContent = "DÍGITO CONSEGUIDO: 4";
+      } else {
+        resultadoGeneral.textContent = "Aún no has acertado todo. Revisa las respuestas marcadas como incorrectas.";
+        resultadoGeneral.style.color = "#ffcccc";
+      }
+    }
+  </script>
+</body>
+</html>

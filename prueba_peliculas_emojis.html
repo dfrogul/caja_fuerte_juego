@@ -183,7 +183,7 @@
     <div class="subtitulo">Adivina la película a partir de los emojis</div>
 
     <div class="instrucciones">
-      Marca una opción en cada pregunta. Si aciertas las 4,
+      Marca una opción en cada pregunta. Si aciertas <strong>al menos 4 de las 5</strong>,
       obtendrás el <strong>dígito 4 del código de la caja fuerte</strong>.
     </div>
 
@@ -247,6 +247,21 @@
       <div id="feedback4" class="feedback"></div>
     </div>
 
+    <!-- Pregunta 5 -->
+    <div class="pregunta">
+      <h2>Pregunta 5</h2>
+      <div class="enunciado">
+        Emojis: <span style="font-size:1.3rem;">❤️🎄✈️🇬🇧</span>
+      </div>
+      <ul class="opciones">
+        <li><label><input type="radio" name="p5" value="A">A) Love Actually</label></li>
+        <li><label><input type="radio" name="p5" value="B">B) The Holiday</label></li>
+        <li><label><input type="radio" name="p5" value="C">C) Last Christmas</label></li>
+        <li><label><input type="radio" name="p5" value="D">D) El diario de Bridget Jones</label></li>
+      </ul>
+      <div id="feedback5" class="feedback"></div>
+    </div>
+
     <div class="botonera">
       <button type="button" onclick="corregir()">Comprobar respuestas</button>
       <button type="button" onclick="resetear()" class="secondary">Intentar de nuevo</button>
@@ -261,7 +276,8 @@
       p1: "C",
       p2: "B",
       p3: "A",
-      p4: "B"
+      p4: "B",
+      p5: "A"
     };
 
     const DIGITO_4 = 4;
@@ -273,10 +289,11 @@
       const fb2 = document.getElementById("feedback2");
       const fb3 = document.getElementById("feedback3");
       const fb4 = document.getElementById("feedback4");
+      const fb5 = document.getElementById("feedback5");
       const resultadoGeneral = document.getElementById("resultadoGeneral");
       const digito4 = document.getElementById("digito4");
 
-      [fb1, fb2, fb3, fb4].forEach(fb => {
+      [fb1, fb2, fb3, fb4, fb5].forEach(fb => {
         fb.textContent = "";
         fb.className = "feedback";
       });
@@ -304,29 +321,27 @@
       corregirPregunta("p2", fb2, RESPUESTAS.p2);
       corregirPregunta("p3", fb3, RESPUESTAS.p3);
       corregirPregunta("p4", fb4, RESPUESTAS.p4);
+      corregirPregunta("p5", fb5, RESPUESTAS.p5);
 
-      if (aciertos === 4) {
-        resultadoGeneral.textContent = "Has acertado las 4 películas. Prueba 4 superada.";
+      if (aciertos >= 4) {
+        resultadoGeneral.textContent = `Has acertado ${aciertos} de 5 películas. Prueba 4 superada.`;
         resultadoGeneral.style.color = "#00a481";
         digito4.textContent = "DÍGITO CONSEGUIDO: " + DIGITO_4;
       } else {
-        resultadoGeneral.textContent = "Aún no has acertado todo. Revisa las respuestas marcadas como incorrectas.";
+        resultadoGeneral.textContent = `Has acertado solo ${aciertos} de 5. Aún no está todo correcto.`;
         resultadoGeneral.style.color = "#ffcccc";
         digito4.textContent = "";
       }
     }
 
     function resetear() {
-      // Desmarcar radios
       document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
 
-      // Limpiar feedbacks
-      [feedback1, feedback2, feedback3, feedback4].forEach(fb => {
+      [feedback1, feedback2, feedback3, feedback4, feedback5].forEach(fb => {
         fb.textContent = "";
         fb.className = "feedback";
       });
 
-      // Limpiar resultado
       resultadoGeneral.textContent = "";
       digito4.textContent = "";
       window.scrollTo({ top: 0, behavior: "smooth" });

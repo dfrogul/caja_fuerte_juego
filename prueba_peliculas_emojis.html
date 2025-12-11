@@ -132,6 +132,7 @@
       letter-spacing: 0.5px;
       box-shadow: 0 0 10px rgba(0, 164, 129, 0.7);
       transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+      margin: 6px;
     }
 
     button:hover {
@@ -248,6 +249,7 @@
 
     <div class="botonera">
       <button type="button" onclick="corregir()">Comprobar respuestas</button>
+      <button type="button" onclick="resetear()" class="secondary">Intentar de nuevo</button>
     </div>
 
     <div id="resultadoGeneral"></div>
@@ -306,12 +308,30 @@
       if (aciertos === 4) {
         resultadoGeneral.textContent = "Has acertado las 4 películas. Prueba 4 superada.";
         resultadoGeneral.style.color = "#00a481";
-        digito4.textContent = "DÍGITO CONSEGUIDO: 4";
+        digito4.textContent = "DÍGITO CONSEGUIDO: " + DIGITO_4;
       } else {
         resultadoGeneral.textContent = "Aún no has acertado todo. Revisa las respuestas marcadas como incorrectas.";
         resultadoGeneral.style.color = "#ffcccc";
+        digito4.textContent = "";
       }
+    }
+
+    function resetear() {
+      // Desmarcar radios
+      document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+
+      // Limpiar feedbacks
+      [feedback1, feedback2, feedback3, feedback4].forEach(fb => {
+        fb.textContent = "";
+        fb.className = "feedback";
+      });
+
+      // Limpiar resultado
+      resultadoGeneral.textContent = "";
+      digito4.textContent = "";
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   </script>
 </body>
 </html>
+

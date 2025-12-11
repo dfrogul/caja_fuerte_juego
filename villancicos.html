@@ -34,7 +34,6 @@
     box-shadow:0 8px 24px rgba(0,0,0,.25);
   }
   .q-title{ font-weight:700; margin-bottom:10px }
-  .note{ font-size:.9rem; color:#cfeee5; margin-bottom:6px; opacity:.85 }
   .options{ display:grid; gap:10px }
   .opt{
     background:#0f3a31;
@@ -102,7 +101,7 @@
 </div>
 
 <script>
-// Preguntas definitivas (misma respuesta correcta, ahora tipo test)
+// Preguntas definitivas (6 preguntas, 4 opciones cada una)
 const QUESTIONS = [
   {
     text: "El camino que lleva a Belén baja hasta el valle que la nieve ____",
@@ -131,7 +130,7 @@ const QUESTIONS = [
   },
   {
     text: "En el cielo hay una estrella que a los reyes magos ____",
-    options: ["guía","ve","nombra","mira"],
+    options: ["ve","guía","nombra","mira"],
     correctText: "guía"
   }
 ];
@@ -224,3 +223,4 @@ renderQuiz();
 </script>
 </body>
 </html>
+

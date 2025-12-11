@@ -53,7 +53,7 @@
 </div>
 
 <script>
-// Validación por texto literal; dígito mostrado siempre 6 si score >= 5.
+// Preguntas definitivas
 const QUESTIONS = [
   {
     text: "¿Cuál es la edad media del Consejo Rector?",
@@ -76,9 +76,9 @@ const QUESTIONS = [
     correctText: "1999"
   },
   {
-    text: "¿Cuántos rollos de TPV se usan de media al año?",
-    options: ["19.000","20.000","17.000","29.000"],
-    correctText: "20.000"
+    text: "¿En qué año se celebró el 50 aniversario?",
+    options: ["2015","2014","2016","2017"],
+    correctText: "2016"
   },
   {
     text: "Indica el número de personas que se han incorporado a la plantilla en el año 2025.",
@@ -86,82 +86,95 @@ const QUESTIONS = [
     correctText: "10"
   },
   {
-    text: "¿Cuál es el nombre más repetido entre los empleados de Caixa Rural Galega, si solo contamos los nombres no compuestos (sin segundas partes como “José Manuel” o “María del Carmen”)?",
-    options: ["Silvia","Javier","Mónica","Verónica"],
-    correctText: "Verónica"
+    text: "¿Cuántas oficinas hay en la provincia de Lugo + la provincia de Ourense?",
+    options: ["36","34","31","39"],
+    correctText: "39"
   }
 ];
 
-const quizEl=document.getElementById("quiz");
-const btnSubmit=document.getElementById("btnSubmit");
-const btnClear=document.getElementById("btnClear");
-const resultEl=document.getElementById("result");
+const quizEl = document.getElementById("quiz");
+const btnSubmit = document.getElementById("btnSubmit");
+const btnClear = document.getElementById("btnClear");
+const resultEl = document.getElementById("result");
 
+// Renderizado
 function renderQuiz(){
-  quizEl.innerHTML="";
-  QUESTIONS.forEach((q,qi)=>{
-    const card=document.createElement("div");
-    card.className="card";
-    const title=document.createElement("div");
-    title.className="q-title";
-    title.textContent=`${qi+1}. ${q.text}`;
+  quizEl.innerHTML = "";
+  QUESTIONS.forEach((q, qi) => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const title = document.createElement("div");
+    title.className = "q-title";
+    title.textContent = `${qi+1}. ${q.text}`;
     card.appendChild(title);
-    const opts=document.createElement("div");
-    opts.className="options";
-    q.options.forEach((opt)=>{
-      const label=document.createElement("label");
-      label.className="opt";
-      const input=document.createElement("input");
-      input.type="radio"; input.name=`q-${qi}`; input.value=opt;
+
+    const opts = document.createElement("div");
+    opts.className = "options";
+
+    q.options.forEach((opt) => {
+      const label = document.createElement("label");
+      label.className = "opt";
+
+      const input = document.createElement("input");
+      input.type = "radio";
+      input.name = `q-${qi}`;
+      input.value = opt;
       label.appendChild(input);
-      const span=document.createElement("span");
-      span.textContent=opt;
+
+      const span = document.createElement("span");
+      span.textContent = opt;
       label.appendChild(span);
+
       opts.appendChild(label);
     });
+
     card.appendChild(opts);
     quizEl.appendChild(card);
   });
 }
 
 function getScore(){
-  let score=0,totalDef=0;
-  QUESTIONS.forEach((q,qi)=>{
-    if(q.correctText){
-      totalDef++;
-      const checked=document.querySelector(`input[name='q-${qi}']:checked`);
-      if(checked && checked.value.trim()===q.correctText.trim()) score++;
+  let score = 0;
+  QUESTIONS.forEach((q, qi) => {
+    const checked = document.querySelector(`input[name='q-${qi}']:checked`);
+    if(checked && checked.value.trim() === q.correctText.trim()){
+      score++;
     }
   });
-  return {score,totalDef};
+  return score;
 }
 
-btnSubmit.addEventListener("click",()=>{
-  const {score,totalDef}=getScore();
-  resultEl.style.display="block";
-  if(score>=5){
-    const d1 = 6;
-    resultEl.innerHTML=`
+btnSubmit.addEventListener("click", () => {
+  const score = getScore();
+  resultEl.style.display = "block";
+
+  if(score >= 5){
+    const d1 = score % 10;
+    resultEl.innerHTML = `
       <h2>¡Muy bien!</h2>
-      <p>Has acertado <strong>${score}</strong> de ${totalDef} preguntas.</p>
+      <p>Has acertado <strong>${score}</strong> de 7 preguntas.</p>
       <p>Tu primer dígito del código es:</p>
       <div class="code-box">${d1}</div>`;
   } else {
-    resultEl.innerHTML=`
-      <h2>¡Casi!</h2>
-      <p>Has acertado ${score} de ${totalDef} preguntas. Necesitas al menos 5 para conseguir el dígito.</p>
-      <button id='retryBtn'>Volver a intentar</button>`;
-    document.getElementById("retryBtn").addEventListener("click",()=>{
-      document.querySelectorAll("input[type='radio']").forEach(r=>r.checked=false);
-      resultEl.style.display="none";
+    resultEl.innerHTML = `
+      <h2>No lo has conseguido...</h2>
+      <p>Has acertado ${score} de 7 preguntas. Necesitas al menos 5 para obtener el dígito.</p>
+      <button id='retryBtn'>Intentar de nuevo</button>`;
+
+    document.getElementById("retryBtn").addEventListener("click", () => {
+      document.querySelectorAll("input[type='radio']").forEach(r => r.checked = false);
+      resultEl.style.display = "none";
+      window.scrollTo({top:0, behavior:"smooth"});
     });
   }
+
   resultEl.scrollIntoView({behavior:"smooth"});
 });
 
-btnClear.addEventListener("click",()=>{
-  document.querySelectorAll("input[type='radio']").forEach(r=>r.checked=false);
-  resultEl.style.display="none";
+btnClear.addEventListener("click", () => {
+  document.querySelectorAll("input[type='radio']").forEach(r => r.checked = false);
+  resultEl.style.display = "none";
 });
 
 renderQuiz();

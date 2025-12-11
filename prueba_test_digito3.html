@@ -141,6 +141,7 @@
       letter-spacing: 0.5px;
       box-shadow: 0 0 10px rgba(0, 164, 129, 0.7);
       transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+      margin: 6px;
     }
 
     button:hover {
@@ -177,21 +178,9 @@
       text-align: center;
     }
 
-    @media (max-width: 600px) {
-      .container {
-        padding: 18px 14px;
-      }
-
-      h1 {
-        font-size: 1.2rem;
-      }
-
-      .enunciado {
-        font-size: 0.85rem;
-      }
-    }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h1>Prueba 3 · Lógica bancaria</h1>
@@ -203,162 +192,153 @@
       <br>Introduce solo números (sin símbolos ni puntos).
     </div>
 
-    <!-- Pregunta 1: Bonos / cupones -->
+    <!-- Preguntas -->
     <div class="pregunta">
       <h2>Pregunta 1 · Bonos y cupones</h2>
       <div class="enunciado">
-        Un cliente compra <strong>6 bonos</strong> con estas características:
-        <ul>
-          <li>Valor nominal: <strong>1.000 €</strong> cada bono</li>
-          <li>Cupón anual: <strong>3,75%</strong></li>
-          <li>Pago del cupón: <strong>una vez al año</strong></li>
-        </ul>
-        ¿Cuánto cobrará el cliente <strong>en total al año</strong> en cupones por esos 6 bonos?
+        Un cliente compra <strong>6 bonos</strong> de 1.000 € con cupón del <strong>3,75%</strong>.
+        ¿Cuánto cobra al año en cupones?
       </div>
       <div class="respuesta">
-        <label for="respuesta1">Respuesta (€):</label>
-        <input id="respuesta1" type="number" inputmode="decimal" />
+        <label>Respuesta (€):</label>
+        <input id="respuesta1" type="number">
       </div>
       <div id="feedback1" class="feedback"></div>
     </div>
 
-    <!-- Pregunta 2: Acciones -->
     <div class="pregunta">
       <h2>Pregunta 2 · Acciones</h2>
       <div class="enunciado">
-        Un cliente compra <strong>85 acciones</strong> a <strong>12,40 €</strong> cada una.
-        La acción sube un <strong>7%</strong> y decide vender <strong>todas</strong>.
-        La comisión de venta es del <strong>0,25%</strong> sobre el importe final de la operación.
-        <br><br>
-        ¿Cuánto dinero <strong>recibe finalmente</strong> el cliente tras aplicar la comisión?
-        <br>(Redondea a euros enteros para el juego).
+        Compra <strong>85 acciones</strong> a 12,40 €. Suben un 7% y las vende.
+        Comisión de venta: <strong>0,25%</strong>.
+        <br>¿Cuánto recibe finalmente? (redondea a euros)
       </div>
       <div class="respuesta">
-        <label for="respuesta2">Respuesta (€):</label>
-        <input id="respuesta2" type="number" inputmode="decimal" />
+        <label>Respuesta (€):</label>
+        <input id="respuesta2" type="number">
       </div>
       <div id="feedback2" class="feedback"></div>
     </div>
 
-    <!-- Pregunta 3: Movimientos en cuenta -->
     <div class="pregunta">
       <h2>Pregunta 3 · Movimientos en cuenta</h2>
       <div class="enunciado">
-        Un cliente tiene <strong>2.450 €</strong> en su cuenta. Ese mismo día realiza estas operaciones, en este orden:
-        <ol>
-          <li>Pago con tarjeta: <strong>−78 €</strong></li>
-          <li>Ingreso en ventanilla: <strong>+320 €</strong></li>
-          <li>Transferencia enviada: <strong>−250 €</strong></li>
-          <li>Comisión por mantenimiento: <strong>−6 €</strong></li>
-        </ol>
-        ¿Cuál es el <strong>saldo final del día</strong>?
+        Saldo inicial: <strong>2.450 €</strong>.
+        Movimientos:
+        <ul>
+          <li>–78 €</li>
+          <li>+320 €</li>
+          <li>–250 €</li>
+          <li>–6 €</li>
+        </ul>
+        ¿Saldo final?
       </div>
       <div class="respuesta">
-        <label for="respuesta3">Saldo final (€):</label>
-        <input id="respuesta3" type="number" inputmode="decimal" />
+        <label>Saldo (€):</label>
+        <input id="respuesta3" type="number">
       </div>
       <div id="feedback3" class="feedback"></div>
     </div>
 
     <div class="botonera">
-      <button type="button" onclick="corregir()">Comprobar respuestas</button>
+      <button onclick="corregir()">Comprobar</button>
+      <button onclick="resetear()" class="secondary">Intentar de nuevo</button>
     </div>
 
     <div id="resultadoGeneral"></div>
     <div id="digito3" class="digito"></div>
 
     <div class="nota-tecnica">
-      Nota: si el número no es entero, usa el valor redondeado a euros.
+      Nota: si el número no es entero, usa el valor redondeado.
     </div>
   </div>
 
   <script>
-    // Respuestas correctas
-    const RESPUESTAS = {
-      p1: 225,   // 6 bonos · 1.000 € · 3,75% = 225 €
-      p2: 1125,  // Resultado final redondeado tras subida + comisión
-      p3: 2436   // Saldo final tras las 4 operaciones
-    };
+    const RESPUESTAS = { p1: 225, p2: 1125, p3: 2436 };
+    const DIGITO_3 = 5;
 
-    const DIGITO_3 = 5; // Último dígito de 225
-
-    function normalizarNumero(valor) {
-      if (valor === null || valor === undefined) return NaN;
-      if (typeof valor === "string") {
-        valor = valor.replace(",", ".").trim();
-      }
-      return Number(valor);
+    function normalizarNumero(x) {
+      if (x === null || x === undefined) return NaN;
+      return Number(x.toString().replace(",", ".").trim());
     }
 
     function corregir() {
+      const r1 = normalizarNumero(respuesta1.value);
+      const r2 = normalizarNumero(respuesta2.value);
+      const r3 = normalizarNumero(respuesta3.value);
+
+      // VALIDACIÓN DE CAMPOS VACÍOS
+      if (respuesta1.value === "" || respuesta2.value === "" || respuesta3.value === "") {
+        resultadoGeneral.textContent = "Completa las 3 respuestas antes de comprobar.";
+        resultadoGeneral.style.color = "#ff4d4d";
+        digito3.textContent = "";
+        return;
+      }
+
       let aciertos = 0;
 
-      const r1 = normalizarNumero(document.getElementById("respuesta1").value);
-      const r2 = normalizarNumero(document.getElementById("respuesta2").value);
-      const r3 = normalizarNumero(document.getElementById("respuesta3").value);
+      // Reset feedback
+      [feedback1, feedback2, feedback3].forEach(f => {
+        f.textContent = "";
+        f.className = "feedback";
+      });
 
-      const fb1 = document.getElementById("feedback1");
-      const fb2 = document.getElementById("feedback2");
-      const fb3 = document.getElementById("feedback3");
-      const resultadoGeneral = document.getElementById("resultadoGeneral");
-      const digito3 = document.getElementById("digito3");
-
-      fb1.textContent = "";
-      fb2.textContent = "";
-      fb3.textContent = "";
-      fb1.className = "feedback";
-      fb2.className = "feedback";
-      fb3.className = "feedback";
-      resultadoGeneral.textContent = "";
-      digito3.textContent = "";
-
-      // Pregunta 1
-      if (isNaN(r1)) {
-        fb1.textContent = "Introduce un número.";
-        fb1.classList.add("error");
-      } else if (r1 === RESPUESTAS.p1) {
-        fb1.textContent = "Correcto.";
-        fb1.classList.add("ok");
+      // Corrección P1
+      if (r1 === RESPUESTAS.p1) {
+        feedback1.textContent = "Correcto.";
+        feedback1.classList.add("ok");
         aciertos++;
       } else {
-        fb1.textContent = "Incorrecto.";
-        fb1.classList.add("error");
+        feedback1.textContent = "Incorrecto.";
+        feedback1.classList.add("error");
       }
 
-      // Pregunta 2
-      if (isNaN(r2)) {
-        fb2.textContent = "Introduce un número.";
-        fb2.classList.add("error");
-      } else if (r2 === RESPUESTAS.p2) {
-        fb2.textContent = "Correcto.";
-        fb2.classList.add("ok");
+      // Corrección P2
+      if (r2 === RESPUESTAS.p2) {
+        feedback2.textContent = "Correcto.";
+        feedback2.classList.add("ok");
         aciertos++;
       } else {
-        fb2.textContent = "Incorrecto.";
-        fb2.classList.add("error");
+        feedback2.textContent = "Incorrecto.";
+        feedback2.classList.add("error");
       }
 
-      // Pregunta 3
-      if (isNaN(r3)) {
-        fb3.textContent = "Introduce un número.";
-        fb3.classList.add("error");
-      } else if (r3 === RESPUESTAS.p3) {
-        fb3.textContent = "Correcto.";
-        fb3.classList.add("ok");
+      // Corrección P3
+      if (r3 === RESPUESTAS.p3) {
+        feedback3.textContent = "Correcto.";
+        feedback3.classList.add("ok");
         aciertos++;
       } else {
-        fb3.textContent = "Incorrecto.";
-        fb3.classList.add("error");
+        feedback3.textContent = "Incorrecto.";
+        feedback3.classList.add("error");
       }
 
+      // Resultado general
       if (aciertos === 3) {
         resultadoGeneral.textContent = "Has acertado las 3 preguntas. Prueba 3 superada.";
         resultadoGeneral.style.color = "#00a481";
-        digito3.textContent = "DÍGITO CONSEGUIDO: 5";
+        digito3.textContent = "DÍGITO CONSEGUIDO: " + DIGITO_3;
       } else {
-        resultadoGeneral.textContent = "Aún no has acertado todo. Revisa las respuestas marcadas como incorrectas.";
+        resultadoGeneral.textContent = "Aún no está todo correcto. Revisa las respuestas incorrectas.";
         resultadoGeneral.style.color = "#ffcccc";
+        digito3.textContent = "";
       }
+    }
+
+    function resetear() {
+      // Limpiar campos
+      respuesta1.value = "";
+      respuesta2.value = "";
+      respuesta3.value = "";
+
+      // Limpiar mensajes
+      [feedback1, feedback2, feedback3].forEach(f => {
+        f.textContent = "";
+        f.className = "feedback";
+      });
+
+      resultadoGeneral.textContent = "";
+      digito3.textContent = "";
     }
   </script>
 </body>
